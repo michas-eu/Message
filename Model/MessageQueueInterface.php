@@ -137,36 +137,6 @@ interface MessageQueueInterface
     public function getError();
 
     /**
-     * Set created at
-     *
-     * @param DateTime $createdAt
-     * @return MessageQueueInterface
-     */
-    public function setCreatedAt($createdAt);
-
-    /**
-     * Get created at
-     *
-     * @return DateTime
-     */
-    public function getCreatedAt();
-
-    /**
-     * Set updated at
-     *
-     * @param DateTime $updatedAt
-     * @return MessageQueueInterface
-     */
-    public function setUpdatedAt($updatedAt);
-
-    /**
-     * Get updated at
-     *
-     * @return DateTime
-     */
-    public function getUpdatedAt();
-
-    /**
      * Set send at
      *
      * @param DateTime $sendAt
