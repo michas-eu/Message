@@ -1,7 +1,7 @@
 services:
     message.queue_manager:
         class: Jasuwienas\MessageBundle\Service\QueueManagerService
-        arguments: ["@doctrine.orm.entity_manager", "%queue_object_class%"]
+        arguments: ["@doctrine.orm.entity_manager", "%message.queue_object_class%"]
     message.queue_manager.process:
         class: Jasuwienas\MessageBundle\Service\ProcessQueueService
         arguments: ["@message.queue_manager", "@service_container", "@translator"]

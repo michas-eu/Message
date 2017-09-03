@@ -21,7 +21,9 @@ class MessageExtension extends Extension
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
-
+        if(isset($config['queue_object_class'])) {
+            $container->setParameter('message.queue_object_class', $config['queue_object_class']);
+        }
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('parameters.yml');
         $loader->load('services.yml');
