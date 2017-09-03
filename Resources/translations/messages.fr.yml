@@ -1,0 +1,3 @@
+jswns.message.error.adapter.response: La méthode ,, envoyer «service l\'envoi de courriels devrait payer MailBundle \ Component \ réponse!
+jswns.message.error.adapter.interface: Service de l\'envoi de courriels devrait mettre en œuvre MailBundle \ Service \ expéditeurs \ Interfaces \ MailSenderInterface
+jswns.message.error.adapter: Adaptateur invalide!

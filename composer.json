@@ -1,0 +1,22 @@
+{
+    "name" : "jasuwienas/message",
+    "description" : "Integrates messages queue into Symfony2 project.",
+    "type" : "symfony-bundle",
+    "authors" : [{
+        "name" : "Jasuwienas Mariusz",
+        "email" : "jasuwienas@gmail.com"
+    }],
+    "keywords" : [
+        "message mail sms symfony2"
+    ],
+    "license" : [
+        "MIT"
+    ],
+    "require" : {
+    },
+    "autoload" : {
+        "psr-4" : { "Jasuwienas\\MessageBundle\\" : ""}
+    },
+    "repositories" : [{
+    }]
+}
