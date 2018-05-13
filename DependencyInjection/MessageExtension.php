@@ -28,7 +28,7 @@ class MessageExtension extends Extension
             'sms_api_host', 'sms_api_access_token'
         ];
         foreach($parameters as $parameter){
-            if(isset($config[$parameter])) {
+            if(array_key_exists($parameter, $config)) {
                 $container->setParameter('message.' . $parameter, $config[$parameter]);
             }
         }
