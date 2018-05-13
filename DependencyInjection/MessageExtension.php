@@ -30,6 +30,8 @@ class MessageExtension extends Extension
         foreach($parameters as $parameter){
             if(array_key_exists($parameter, $config)) {
                 $container->setParameter('message.' . $parameter, $config[$parameter]);
+            } else {
+                $container->setParameter('message.' . $parameter, null);
             }
         }
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
