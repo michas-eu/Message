@@ -9,9 +9,14 @@ use Jasuwienas\MessageBundle\Service\QueueManagerService as QueueManager;
 use Jasuwienas\MessageBundle\Service\Senders\Interfaces\MessageSenderInterface as MessageSender;
 use Exception;
 
+/**
+ * Class ProcessQueueService
+ * @package Jasuwienas\MessageBundle\Service
+ */
 class ProcessQueueService {
 
-    const MAX_EXECUTION_TIME = 55;
+    /** @var int */
+    private $maxExecutionTime = 55;
 
     /**
      * @var QueueManager
@@ -38,19 +43,44 @@ class ProcessQueueService {
      */
     private $processedMessage;
 
+    /**
+     * ProcessQueueService constructor.
+     * @param QueueManagerService $queueManager
+     * @param Container $container
+     * @param Translator $translator
+     */
     public function __construct(QueueManager $queueManager, Container $container, Translator $translator) {
         $this->queueManager = $queueManager;
         $this->container = $container;
         $this->translator = $translator;
     }
 
+    /**
+     * Set max execution time (in seconds)
+     *
+     * @param int $maxExecutionTime
+     * @return ProcessQueueService
+     */
+    public function setMaxExecutionTime($maxExecutionTime) {
+        $this->maxExecutionTime = $maxExecutionTime;
+        return $this;
+    }
+
+    /**
+     * Run
+     *
+     * @throws Exception
+     */
     public function run() {
         $this->initialize();
-        while($this->getExecutionTime() < self::MAX_EXECUTION_TIME) {
+        while($this->getExecutionTime() < $this->maxExecutionTime) {
             $this->sendOneMessage();
         }
     }
 
+    /**
+     * Initialize
+     */
     private function initialize() {
         $this->startTime = microtime(true);
     }

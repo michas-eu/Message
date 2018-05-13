@@ -73,6 +73,18 @@ abstract class MessageQueue implements MessageQueueInterface
     protected $contentId;
 
     /**
+     * @var array
+     */
+    protected $attachments = [];
+
+    /**
+     * Priority - higher priority messages will be send sooner
+     *
+     * @var int
+     */
+    protected $priority = 0;
+
+    /**
      * Get id
      *
      * @return integer
@@ -358,4 +370,30 @@ abstract class MessageQueue implements MessageQueueInterface
         $this->sendAt = new DateTime('+5 minutes');
         $this->status = MessageQueueInterface::STATUS_TRY_AGAIN;
     }
+
+
+    /**
+     * Get content type
+     *
+     * @return array
+     */
+    public function getAttachments()
+    {
+        return $this->attachments;
+    }
+
+    /**
+     * Set attachments
+     *
+     * @param array $attachments
+     *
+     * @return MessageQueue
+     */
+    public function setAttachments($attachments)
+    {
+        $this->attachments = $attachments;
+
+        return $this;
+    }
+
 }

@@ -24,6 +24,14 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode('queue_object_class')->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode('smtp_mailer_user')->end()
+               ->scalarNode('smtp_mailer_sender')->end()
+                ->scalarNode('freshmail_api_host')->defaultValue('https://api.freshmail.com/')->end()
+                ->scalarNode('freshmail_api_prefix')->defaultValue('rest/')->end()
+                ->scalarNode('freshmail_api_api_key')->end()
+                ->scalarNode('freshmail_api_secret_key')->end()
+                ->scalarNode('sms_api_host')->defaultValue('https://api.smsapi.pl/sms.do')->end()
+                ->scalarNode('sms_api_access_token')->end()
             ->end()
         ;
 

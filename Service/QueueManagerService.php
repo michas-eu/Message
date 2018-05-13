@@ -12,18 +12,25 @@ class QueueManagerService {
 
     const MAX_SENDING_ATTEMPTS = 5;
 
-    /**
-     * @var EntityManager $entityManager
-     */
+    /** @var EntityManager $entityManager */
     private $entityManager;
 
+    /** @var string */
+    private $messageQueueClass;
+
+    /** @var string */
+    private $defaultAdapter = 'smtp';
+
     /**
+     * QueueManagerService constructor.
      * @param EntityManager $entityManager
-     * @param string $messageQueueClass
+     * @param $messageQueueClass
+     * @param string $defaultAdapter
      */
-    public function __construct(EntityManager $entityManager, $messageQueueClass) {
+    public function __construct(EntityManager $entityManager, $messageQueueClass, $defaultAdapter = 'smtp') {
         $this->entityManager = $entityManager;
         $this->messageQueueClass = $messageQueueClass;
+        $this->defaultAdapter = $defaultAdapter;
     }
 
     /**
@@ -32,9 +39,10 @@ class QueueManagerService {
      * @param string $body
      * @param DateTime|null $sendAt
      * @param string $adapter
+     * @param array $attachments
      */
-    public function push($recipient, $title, $body, $sendAt = null, $adapter = 'freshmail') {
-        $queueElement = $this->create($recipient, $title, $body, $sendAt, $adapter);
+    public function push($recipient, $title, $body, $sendAt = null, $adapter = null, $attachments = []) {
+        $queueElement = $this->create($recipient, $title, $body, $sendAt, $adapter, $attachments);
         $this->save($queueElement);
     }
 
@@ -44,9 +52,14 @@ class QueueManagerService {
      * @param string $body
      * @param DateTime|null $sendAt
      * @param string $adapter
+     * @param array $attachments
+     *
      * @return MessageQueue
      */
-    public function create($recipient, $title, $body, $sendAt = null, $adapter = 'freshmail') {
+    public function create($recipient, $title, $body, $sendAt = null, $adapter = null, $attachments = []) {
+        if($adapter === null) {
+            $adapter = $this->defaultAdapter;
+        }
         if(!$sendAt) {
             $sendAt = new DateTime();
         }
@@ -60,6 +73,7 @@ class QueueManagerService {
             ->setBody($body)
             ->setPlainBody(strip_tags($body))
             ->setSendAt($sendAt)
+            ->setAttachments($attachments)
         ;
         return $queueElement;
     }
@@ -100,12 +114,16 @@ class QueueManagerService {
     public function createReadyToProcessQueryBuilder($queryName, $indexBy = null) {
         /** @var EntityRepository $repository  */
         $repository = $this->entityManager->getRepository($this->messageQueueClass);
-        return $repository->createQueryBuilder($queryName, $indexBy)
+        $queryBuilder = $repository->createQueryBuilder($queryName, $indexBy)
             ->andWhere($queryName . '.status in (:status)')
             ->andWhere($queryName . '.sendAt < :sendAt')
             ->setParameter('status', [MessageQueue::STATUS_NEW, MessageQueue::STATUS_TRY_AGAIN])
             ->setParameter('sendAt', new DateTime())
             ;
+        if($this->entityManager->getClassMetadata($this->messageQueueClass)->hasField('priority')) {
+            $queryBuilder->orderBy($queryName.'.priority', 'desc');
+        }
+        return $queryBuilder;
     }
 
     /**

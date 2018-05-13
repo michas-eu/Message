@@ -1,6 +1,10 @@
 <?php
 namespace Jasuwienas\MessageBundle\Component;
 
+/**
+ * Class Response
+ * @package Jasuwienas\MessageBundle\Component
+ */
 class Response
 {
 

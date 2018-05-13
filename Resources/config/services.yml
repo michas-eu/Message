@@ -7,7 +7,10 @@ services:
         arguments: ["@message.queue_manager", "@service_container", "@translator"]
     message.sender.smtp:
         class: Jasuwienas\MessageBundle\Service\Senders\SmtpMailSenderService
-        arguments: ["@mailer", '%smtp_mailer_user%']
+        arguments: ["@mailer", '%message.smtp_mailer_user%', '%message.smtp_mailer_sender%']
     message.sender.freshmail:
         class: Jasuwienas\MessageBundle\Service\Senders\FreshMailSenderService
-        arguments: ['%freshmail_api_host%', '%freshmail_api_prefix%', '%freshmail_api_api_key%', '%freshmail_api_secret_key%']
+        arguments: ['%message.freshmail_api_host%', '%message.freshmail_api_prefix%', '%message.freshmail_api_api_key%', '%message.freshmail_api_secret_key%']
+    message.sender.sms:
+        class: Jasuwienas\MessageBundle\Service\Senders\SmsSenderService
+        arguments: ['%message.sms_api_host%', '%message.sms_api_access_token%']

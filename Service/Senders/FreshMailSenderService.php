@@ -6,6 +6,10 @@ use Jasuwienas\MessageBundle\Model\MessageQueueInterface as MessageQueue;
 use Jasuwienas\MessageBundle\Service\Senders\Interfaces\MessageSenderInterface;
 use Exception;
 
+/**
+ * Class FreshMailSenderService
+ * @package Jasuwienas\MessageBundle\Service\Senders
+ */
 class FreshMailSenderService implements MessageSenderInterface {
 
     private $errors = [];
@@ -19,10 +23,11 @@ class FreshMailSenderService implements MessageSenderInterface {
     private $prefix = 'rest/';
 
     /**
-     * @param $freshMailHost
-     * @param $prefix
-     * @param $apiKey
-     * @param $secretKey
+     * FreshMailSenderService constructor.
+     * @param string $freshMailHost
+     * @param string $prefix
+     * @param string $apiKey
+     * @param string $secretKey
      */
     public function __construct($freshMailHost, $prefix, $apiKey, $secretKey) {
         $this->freshMailHost = $freshMailHost;
@@ -32,6 +37,8 @@ class FreshMailSenderService implements MessageSenderInterface {
     }
 
     /**
+     * Send
+     *
      * @param MessageQueue $messageQueue
      * @return Response
      */
@@ -43,6 +50,10 @@ class FreshMailSenderService implements MessageSenderInterface {
                 'text' => $messageQueue->getPlainBody(),
                 'html' => $messageQueue->getBody()
             ];
+            $attachments = $messageQueue->getAttachments();
+            if($attachments && is_array($attachments) && count($attachments) > 0) {
+                $data['attachments'] = $messageQueue->getAttachments();
+            }
             $this->doRequest('mail', $data);
             return new Response(true);
         } catch(Exception $exception) {
@@ -51,7 +62,9 @@ class FreshMailSenderService implements MessageSenderInterface {
     }
 
     /**
-     * @return array
+     * Get errors
+     *
+     * @return array|boolean
      */
     public function getErrors()
     {
@@ -63,6 +76,8 @@ class FreshMailSenderService implements MessageSenderInterface {
     }
 
     /**
+     * Get response
+     *
      * @return array
      */
     public function getResponse()
@@ -71,6 +86,8 @@ class FreshMailSenderService implements MessageSenderInterface {
     }
 
     /**
+     * Get raw response
+     *
      * @return array
      */
     public function getRawResponse()
@@ -79,6 +96,8 @@ class FreshMailSenderService implements MessageSenderInterface {
     }
 
     /**
+     * Get http code
+     *
      * @return array
      */
     public function getHttpCode()
@@ -98,6 +117,8 @@ class FreshMailSenderService implements MessageSenderInterface {
     }
 
     /**
+     * Set content type
+     *
      * @param string $contentType
      * @return FreshMailSenderService $this
      */
@@ -117,6 +138,15 @@ class FreshMailSenderService implements MessageSenderInterface {
         return $this;
     }
 
+    /**
+     * Do request
+     *
+     * @param string $strUrl
+     * @param array $arrParams
+     * @param bool $boolRawResponse
+     * @return mixed|null
+     * @throws Exception
+     */
     public function doRequest($strUrl, $arrParams = array(), $boolRawResponse = false) {
         if ( empty($arrParams) ) {
             $strPostData = '';

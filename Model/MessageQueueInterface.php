@@ -209,4 +209,19 @@ interface MessageQueueInterface
      * Request next sending attempts (with 5 minutes interval)
      */
     public function requestNextSendingAttempt();
+
+    /**
+     * Set attachments
+     *
+     * @param array $attachments
+     * @return MessageQueueInterface
+     */
+    public function setAttachments($attachments);
+
+    /**
+     * Get attachments - should return array of strings with absolute path to files.
+     *
+     * @return array
+     */
+    public function getAttachments();
 }

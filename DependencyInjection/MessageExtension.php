@@ -21,11 +21,18 @@ class MessageExtension extends Extension
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
-        if(isset($config['queue_object_class'])) {
-            $container->setParameter('message.queue_object_class', $config['queue_object_class']);
+        $parameters = [
+            'queue_object_class',
+            'smtp_mailer_user', 'smtp_mailer_sender',
+            'freshmail_api_host', 'freshmail_api_prefix', 'freshmail_api_api_key', 'freshmail_api_secret_key',
+            'sms_api_host', 'sms_api_access_token'
+        ];
+        foreach($parameters as $parameter){
+            if(isset($config[$parameter])) {
+                $container->setParameter('message.' . $parameter, $config[$parameter]);
+            }
         }
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('parameters.yml');
         $loader->load('services.yml');
     }
 }

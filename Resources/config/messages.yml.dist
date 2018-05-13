@@ -1,7 +1,10 @@
-parameters:
+messages:
     freshmail_api_host:         'https://api.freshmail.com/'
     freshmail_api_prefix:       'rest/'
     freshmail_api_api_key:      ~
     freshmail_api_secret_key:   ~
+
+    sms_api_host: 'https://api.smsapi.pl/sms.do'
+    sms_api_access_token: ~
 
     smtp_mailer_user: ~
